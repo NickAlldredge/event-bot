@@ -1,8 +1,8 @@
 <template>
-    <section class="p-5 flex flex-wrap justify-evenly">
-        <base-card v-for="birthday in birthdayStore.birthdays">
+    <section class="p-5 flex grid-cols-3 gap-4">
+        <base-card v-for="birthday in birthdayStore.birthdays" :key="birthday.id">
             <template #header>{{birthday.username}}</template>
-            <template #body>{{birthday.birthday}}</template>
+            <template #body>Birthday: {{birthday.birthday}}</template>
         </base-card>
     </section>
 </template>
@@ -16,6 +16,9 @@ export default {
         return {
             birthdayStore
         };
+    },
+    created() {
+        this.birthdayStore.loadBirthdays();
     }
 }
 </script>

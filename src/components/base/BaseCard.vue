@@ -1,9 +1,9 @@
 <template>
-    <article class="inline-block flex-auto max-w-lg p-2 m-1 rounded-md border drop-shadow-sm">
-        <h3 class="text-xl">
-            <slot name="header" class="text-3xl"></slot>
+    <article class="w-auto col-auto rounded-md overflow-hidden border drop-shadow-sm">
+        <h3 class="text-xl p-2 bg-gray-700 text-white">
+            <slot name="header"></slot>
         </h3>
-        <p>
+        <p class="p-2">
             <slot name="body"></slot>
         </p>
     </article>
