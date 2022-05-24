@@ -1,4 +1,8 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia' 
+import { app } from '../firebase/firebase.js';
+import { getDatabase, ref, child, get } from 'firebase/database';
+
+const dbRef = ref(getDatabase(app));
 
 export const useBirthdayStore = defineStore('BirthdayStore', {
   state: () => {
@@ -8,23 +12,27 @@ export const useBirthdayStore = defineStore('BirthdayStore', {
   },
   actions: {
     async loadBirthdays() {
-      const response = await fetch(`${import.meta.env.VITE_FIREBASE_URL}/birthdays.json`);
-      console.log('loading birthdays...');
-      if (!response.ok) {
-        //TODO: add error handling
-      } 
+      try {
+        const snapshot = await get(child(dbRef, 'birthdays'));
+        if(snapshot.exists()) {
+          const loadedBirthdays = [];
+          const data = snapshot.val();
+          for(const key in data) {
+            loadedBirthdays.push({
+              id: key,
+              username: data[key].username,
+              day: data[key].day,
+              month: data[key].month
+            });
+          }
 
-      const data = await response.json();
-      const loadedBirthdays = [];
-      for(const key in data) {
-        loadedBirthdays.push({
-          id: key,
-          username: data[key].username,
-          birthday: data[key].birthday
-        });
+          this.birthdays = loadedBirthdays;
+        }
+
+      } catch (error) {
+        console.error(error);
       }
-
-      this.birthdays = loadedBirthdays;
+      
     }
   }
 });
