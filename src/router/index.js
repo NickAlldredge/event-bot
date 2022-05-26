@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { app } from '../firebase/firebase.js';
+import { getUserState } from '../firebase/firebase.js';
 import LoginView from '../views/LoginView.vue';
 import DashboardView from '../views/DashboardView.vue'
 import BirthdaysView from '../views/BirthdaysView.vue';
@@ -11,35 +11,42 @@ const router = createRouter({
     {
       path: '/',
       name: 'login',
-      component: LoginView
+      component: LoginView,
+      meta: { requiresUnauth: true}
     },
     {
       path: '/dashboard',
       name: 'dashboard',
       component: DashboardView,
-      meta: {authRequired: true}
+      meta: {requiresAuth: true}
     },
     {
       path: '/birthdays',
       name: 'birthdays',
       component: BirthdaysView,
-      meta: {authRequired: true}
+      meta: {requiresAuth: true}
     },
     {
       path: '/secretsanta',
       name: 'secretSanta',
       component: SecretSantaView,
-      meta: {authRequired: true}
+      meta: {requiresAuth: true}
     }
   ]
 });
 
 //Route guards
 router.beforeEach(async (to, from) => {
-  const authRequired = to.matched.some(record => record.meta.authRequired)
-  if(authRequired && !await app.getCurrentUser()) {
-    return {name: 'login'};
-  }
+  const isAuth = await getUserState();
+  console.log(`isAuth? ${isAuth}`);
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  const requiresUnauth = to.matched.some(record => record.meta.requiresUnauth);
+
+  console.log(`requiresAuth? ${requiresAuth}`);
+  console.log(`requiresUnauth? ${requiresUnauth}`);
+
+  if (requiresAuth && !isAuth) return {name: 'login'}
+  else if (requiresUnauth && isAuth) return {name: 'dashboard'}
 });
 
 export default router

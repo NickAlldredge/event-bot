@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia' 
-import { app } from '../firebase/firebase.js';
+import { firebaseApp } from '../firebase/firebase.js';
 import { getDatabase, ref, child, get } from 'firebase/database';
 
-const dbRef = ref(getDatabase(app));
+const dbRef = ref(getDatabase(firebaseApp));
 
 export const useBirthdayStore = defineStore('BirthdayStore', {
   state: () => {

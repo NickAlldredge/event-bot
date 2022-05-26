@@ -26,39 +26,36 @@
 
             <button 
                 v-if="user"
-                @click="logout" 
+                @click="signOutUser" 
                 class="text-white mt-auto p-5 text-xl">Log out</button>
         </nav>
     </header>
 </template>
 
 <script>
-import { RouterLink } from 'vue-router'
-import { auth } from '../firebase/firebase.js';
+import { RouterLink, useRouter } from 'vue-router'
+import { getAuth, signOut } from "firebase/auth";
+import { useAuthState } from "../firebase/firebase.js";
 
 export default {
+    setup() {
+        const {user} = useAuthState();
+        const auth = getAuth();
+
+        const router = useRouter();
+        const signOutUser = async () => {
+            try {
+                await signOut(auth);
+                router.push({name: 'login'});
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
+        return {user, signOutUser};
+    },
     components: {
         RouterLink
-    },
-    data() {
-        return {
-            user: null
-        };
-    },  
-    created() {
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                this.user = user;
-            } else {
-                this.user = null;
-            }
-        })
-    }, 
-    methods: {
-        logout() {
-            auth.signOut();
-            this.$router.push({name: 'login'});
-        }
     }
 }
 </script>

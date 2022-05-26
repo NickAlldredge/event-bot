@@ -1,6 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { ref, onMounted, onUnmounted, computed } from "vue";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -14,17 +15,31 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+export const firebaseApp = initializeApp(firebaseConfig);
 
-const auth = getAuth(app);
+export const useAuthState = () => {
+    const user = ref(null);
+    const error = ref(null);
 
-app.getCurrentUser = () => {
-    return new Promise((resolve, reject) => {
-        const unsubscribe = auth.onAuthStateChanged(user => {
-            unsubscribe();
-            resolve(user);
-        }, reject);
-    })
+    const auth = getAuth();
+    let unsubscribe;
+    onMounted(() => {
+        unsubscribe = onAuthStateChanged(
+            auth,
+            u => (user.value = u),
+            e => (error.value = e)
+        );
+    });
+
+    onUnmounted(() => unsubscribe());
+
+    const isAuthenticated = computed(() => user.value != null)
+
+    return {user, error, isAuthenticated};
 }
 
-export {app, auth};
+export const getUserState = () => {
+    return new Promise((resolve, reject) => {
+        return onAuthStateChanged(getAuth(), resolve, reject);
+    });
+}
