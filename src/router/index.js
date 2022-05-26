@@ -38,12 +38,8 @@ const router = createRouter({
 //Route guards
 router.beforeEach(async (to, from) => {
   const isAuth = await getUserState();
-  console.log(`isAuth? ${isAuth}`);
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
   const requiresUnauth = to.matched.some(record => record.meta.requiresUnauth);
-
-  console.log(`requiresAuth? ${requiresAuth}`);
-  console.log(`requiresUnauth? ${requiresUnauth}`);
 
   if (requiresAuth && !isAuth) return {name: 'login'}
   else if (requiresUnauth && isAuth) return {name: 'dashboard'}
