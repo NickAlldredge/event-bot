@@ -30,3 +30,6 @@ coverage
 # Dev only
 seeds
 .env
+
+#firebase
+.firebaserc
