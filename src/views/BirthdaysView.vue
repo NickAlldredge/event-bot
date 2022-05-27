@@ -1,5 +1,5 @@
 <template>
-    <section class="p-5 flex grid-cols-3 gap-4">
+    <section class="p-2 md:p-5 grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-4">
         <base-card v-for="birthday in birthdayStore.birthdays" :key="birthday.id">
             <template #header>{{birthday.username}}</template>
             <template #body>Birthday: {{birthday.month}} / {{birthday.day}}</template>

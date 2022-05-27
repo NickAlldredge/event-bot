@@ -1,5 +1,7 @@
 <template>
-  <div class="container mx-auto mt-3 flex rounded-lg overflow-hidden min-h-[50vh] bg-gray-100 drop-shadow-lg">
+  <div class="flex overflow-hidden bg-gray-100
+              flex-col
+              md:container md:mt-3 md:mx-auto md:rounded-lg md:flex-row md:drop-shadow-lg min-h-[50vh]">
     <the-navbar></the-navbar>
     <main class="grow">
       <router-view></router-view>

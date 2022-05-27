@@ -1,5 +1,5 @@
 <template>
-    <article class="w-auto col-auto rounded-md overflow-hidden border drop-shadow-sm">
+    <article class="inline rounded-md overflow-hidden border drop-shadow-sm">
         <h3 class="text-xl p-2 bg-gray-700 text-white">
             <slot name="header"></slot>
         </h3>
