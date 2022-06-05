@@ -6,9 +6,8 @@
                 <h1 class="text-gray-50 text-2xl md:text-3xl font-bold">🎈 EventBot 🎉</h1>
             </router-link>
 
-            <div class="flex flex-row flex-wrap md:flex-col">
+            <div v-if="user" class="flex flex-row flex-wrap md:flex-col">
                 <router-link 
-                    v-if="user"
                     class="text-white m-1 p-2 md:p-5 rounded-md hover:text-gray-800 hover:bg-gray-100"
                     active-class="text-gray-800 bg-gray-100"
                     :to="{name: 'birthdays'}"
@@ -17,7 +16,6 @@
                 </router-link>
 
                 <router-link 
-                    v-if="user"
                     class="text-white m-1 p-2 md:p-5 rounded-md hover:text-gray-800 hover:bg-gray-100"
                     active-class="text-gray-800 bg-gray-100"
                     :to="{name: 'secretSanta'}"
@@ -30,7 +28,8 @@
             <button 
                 v-if="user"
                 @click="signOutUser" 
-                class="text-white mt-auto p-2 md:p-5 text-xl">Log out</button>
+                class="text-white mt-auto p-2 md:p-5 text-xl"
+            >Log out</button>
         </nav>
     </header>
 </template>
